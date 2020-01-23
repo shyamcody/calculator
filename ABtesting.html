@@ -1,0 +1,66 @@
+<html>
+<title>A/B testing significance checker:</title>
+<head></head>
+<body>
+<h4>Complete your A/B testing now!</h4>
+<script>
+function stat_test(x1,y1,x2,y2){
+    var p1 = y1/x1;
+    var p2 = y2/x2;
+    diff = p2 - p1;
+    console.log(p1,p2);
+    var pooled_error = p1*(1-p1)/x1 + p2*(1-p2)/x2;
+    var sd = Math.sqrt(pooled_error);
+    console.log(sd);
+    if(Math.abs(diff) < 2* sd){ return 'No';
+    }
+    else if(diff>0){return 'positive';}
+    else{return 'negative';}
+       
+}
+function value(){
+    x1 = parseInt(document.getElementById('Imp_A').value);
+    y1 = parseInt(document.getElementById('Click_A').value);
+    x2 = parseInt(document.getElementById('Imp_B').value);
+    y2 = parseInt(document.getElementById('Click_B').value);
+    return stat_test(x1,y1,x2,y2);
+}
+function calculate_ab(){
+   var val = value();
+   if(val == 'No'){
+   	document.getElementById("result").innerHTML = 'Your result is not significant';
+   }
+   else if(val == 'positive'){ document.getElementById("result").innerHTML = 'Your result is better!';
+   }
+   else if(val == 'negative'){ document.getElementById("result").innerHTML = 'Your result is worse!';
+   }
+   else{}
+  
+}
+</script>
+<table align= "center" Name = "abtest">
+<tr>
+    <td>Impressions in A</td>
+    <td>Clicks in A</td>
+</tr>
+<tr>
+    <td><input type = "text" Id = "Imp_A"></td>
+    <td><input type = "text" Id = "Click_A"></td>
+</tr>
+<tr>
+    <td>Impressions in B</td>
+    <td>Clicks in B</td>
+</tr>
+<tr>
+    <td><input type = "text" Id = "Imp_B"></td>
+    <td><input type = "text" Id = "Click_B"></td>
+</tr>
+</table>
+<button onclick=calculate_ab()>Show me A/B test result!</button>
+<div>
+<h4>result</h4>
+<p Id = "result"></p></div>
+<br/>
+<p Id = "description">This is a very basic template A/B testing tool for clicks impression scenario. We have used normality assumption and sattertheid approximation for the calculation of significance. If you want to re-enter values, refresh the page and enter the new values. Thanks!</p>
+</body>
+</html>
